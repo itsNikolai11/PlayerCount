@@ -1,0 +1,6 @@
+name: PlayerCount
+main: no.nkopperudmoen.PlayerCount
+version: 0.0.1
+api-version: 1.18
+author: itsNikolai11
+commands:
