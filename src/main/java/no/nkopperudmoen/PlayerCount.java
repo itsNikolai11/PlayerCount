@@ -1,7 +1,10 @@
 package no.nkopperudmoen;
 
+import no.nkopperudmoen.Commands.Spiller;
 import no.nkopperudmoen.DAL.DatabaseConnection;
+import no.nkopperudmoen.DAL.PlayerController;
 import no.nkopperudmoen.DAL.PlayerRepository;
+import no.nkopperudmoen.Listeners.PlayerTimeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -17,7 +20,7 @@ public class PlayerCount extends JavaPlugin {
 
     private final PluginManager pm = Bukkit.getPluginManager();
     private final FileConfiguration config = getConfig();
-    private PlayerRepository repo;
+    private PlayerController controller;
     private Logger logger;
 
     @Override
@@ -37,25 +40,25 @@ public class PlayerCount extends JavaPlugin {
 
     private void setupDatabaseConnection() {
         DatabaseConnection databaseConnection;
-
         try {
             databaseConnection = new DatabaseConnection();
-            repo = new PlayerRepository(databaseConnection.getConnection());
+            PlayerRepository repo = new PlayerRepository(databaseConnection.getConnection());
             logger.info("Database koblet til!");
+            controller = new PlayerController(repo);
         } catch (SQLException exception) {
             logger.log(Level.SEVERE, "Databasefeil! Innlasting av plugin avbrytes..");
-            System.out.println(exception.getMessage());
             this.onDisable();
         }
 
     }
 
     private void registerCommands() {
+        getCommand("spiller").setExecutor(new Spiller(controller));
 
     }
 
     private void registerEvents() {
-
+        pm.registerEvents(new PlayerTimeListener(controller), this);
     }
 
     private void loadLang() {

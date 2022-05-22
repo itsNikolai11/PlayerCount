@@ -4,3 +4,8 @@ version: 0.0.1
 api-version: 1.18
 author: itsNikolai11
 commands:
+  spiller:
+    description: Sjekker info om en spiller.
+    usage: /spiller (spiller)
+    aliases:
+      - seen
