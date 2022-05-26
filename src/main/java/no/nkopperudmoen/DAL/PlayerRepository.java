@@ -53,8 +53,8 @@ public class PlayerRepository {
 
     }
 
-    public void insertPlayerName(UUID uuid, String name) {
-        String sql = "INSERT INTO pc_uuidMap VALUES(?,?);";
+    public void insertPlayerName(String name, UUID uuid) {
+        String sql = "INSERT INTO pc_uuidMap (UUID, NAME) VALUES(?,?);";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, uuid.toString());
@@ -79,21 +79,30 @@ public class PlayerRepository {
     }
 
     public UUID getUUID(String name) {
-        String sql = "SELECT UUID FROM pc_uuidMap WHERE NAME = '" + name + "';";
-        String retreivedUUID = null;
+        String sql = "SELECT UUID FROM pc_uuidMap WHERE UPPER(NAME) = '" + name.toUpperCase() + "';";
+        UUID retreivedUUID = null;
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             while (result.next()) {
-                retreivedUUID = result.getString("UUID");
+                retreivedUUID = UUID.fromString(result.getString("UUID"));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        if (retreivedUUID == null) {
-            return null;
+        return retreivedUUID;
+    }
+
+    public boolean existsInPlayerMap(UUID uuid) {
+        String sql = "SELECT NAME  FROM pc_uuidMap WHERE UUID = '" + uuid.toString() + "';";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(sql);
+            return results.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        return UUID.fromString(retreivedUUID);
+        return false;
     }
 
     public String getName(UUID uuid) {

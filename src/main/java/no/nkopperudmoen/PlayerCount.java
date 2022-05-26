@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +21,7 @@ public class PlayerCount extends JavaPlugin {
 
     private final PluginManager pm = Bukkit.getPluginManager();
     private final FileConfiguration config = getConfig();
+    DatabaseConnection databaseConnection;
     private PlayerController controller;
     private Logger logger;
 
@@ -35,11 +37,15 @@ public class PlayerCount extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        try {
+            databaseConnection.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         logger.info("PlayerCount disabled.");
     }
 
     private void setupDatabaseConnection() {
-        DatabaseConnection databaseConnection;
         try {
             databaseConnection = new DatabaseConnection();
             PlayerRepository repo = new PlayerRepository(databaseConnection.getConnection());
@@ -53,7 +59,7 @@ public class PlayerCount extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("spiller").setExecutor(new Spiller(controller));
+        Objects.requireNonNull(getCommand("spiller")).setExecutor(new Spiller(controller));
 
     }
 

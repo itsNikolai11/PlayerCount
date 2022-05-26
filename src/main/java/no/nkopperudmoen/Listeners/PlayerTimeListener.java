@@ -8,23 +8,25 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerTimeListener implements Listener {
-    private PlayerController controller;
+    private final PlayerController controller;
 
     public PlayerTimeListener(PlayerController controller) {
         this.controller = controller;
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
+    public void updatePlayerDataOnJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         controller.updateOnJoin(p);
-        if (!p.hasPlayedBefore()) {
+        controller.updateUUIDMap(p);
+       /* if (!p.hasPlayedBefore()) {
             //Annonser at det er første innlogging
-        }
+            //utfør kommandoer fra config
+        }*/
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
+    public void updatePlayerDataOnQuit(PlayerQuitEvent e) {
         controller.updateOnQuit(e.getPlayer());
     }
 }
