@@ -1,18 +1,37 @@
 package no.nkopperudmoen.DAL;
 
+import no.nkopperudmoen.PlayerCount;
 import no.nkopperudmoen.UTIL.UUIDFetcher;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class PlayerController {
     private final PlayerRepository repo;
+    private static PlayerController instance = null;
 
-    public PlayerController(PlayerRepository repo) {
+    private PlayerController(PlayerRepository repo) {
         this.repo = repo;
+    }
+
+    public static PlayerController getInstance() {
+        if (instance == null) {
+            try {
+                instance = new PlayerController(PlayerRepository.getInstance());
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "Databasetilkobling feilet! Disabler plugin..");
+                Bukkit.getServer().getPluginManager().disablePlugin(PlayerCount.getPlugin(PlayerCount.class));
+                return null;
+            }
+        }
+        return instance;
     }
 
     public void updateOnJoin(Player p) {
@@ -47,6 +66,9 @@ public class PlayerController {
 
     public String getFirstJoined(String player) {
         UUID playerUUID = repo.getUUID(player);
+        if (playerUUID == null) {
+            return null;
+        }
         long firstJoined = repo.getFirstJoined(playerUUID);
         if (firstJoined == 0) {
             return null;
@@ -66,6 +88,10 @@ public class PlayerController {
     public int getJoinedAsNumber(String player) {
         UUID playerUUID = repo.getUUID(player);
         return repo.getPlayerNumber(playerUUID);
+    }
+
+    public ArrayList<String> getAllPlayerNames() {
+        return repo.getMapPlayerNames();
     }
 
     public String getNameExact(String name) {

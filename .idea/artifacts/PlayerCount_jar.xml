@@ -7,6 +7,8 @@
       </element>
       <element id="module-output" name="PlayerCount" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/config.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/lang.yml" />
     </root>
   </artifact>
 </component>

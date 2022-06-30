@@ -1,7 +1,5 @@
 package no.nkopperudmoen.DAL;
 
-import no.nkopperudmoen.UTIL.UUIDFetcher;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +10,8 @@ import org.powermock.api.mockito.PowerMockito;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PlayerControllerTest {
     PlayerRepository repo;
@@ -25,9 +24,9 @@ class PlayerControllerTest {
 
     @BeforeEach
     public void setUp() throws SQLException {
-        TestDBConnection connection = new TestDBConnection();
-        repo = new PlayerRepository(connection.getConnection());
-        controller = new PlayerController(repo);
+        TestDBConnection connection = TestDBConnection.getInstance();
+        repo = PlayerRepository.getInstance();
+        controller = PlayerController.getInstance();
         PowerMockito.when(player.getUniqueId()).thenReturn(uuid);
         PowerMockito.when(player.getName()).thenReturn("itsNikolai11");
         PowerMockito.when(joinEvent.getPlayer()).thenReturn(player);
@@ -85,25 +84,32 @@ class PlayerControllerTest {
     }
 
     @Test
+    void getFirstJoined_OK() {
+
+    }
+
+    @Test
+    void getFirstJoined_PlayerNotFound() {
+
+    }
+
+    @Test
     void updateOnQuit() {
-        throw new NotImplementedException();
+
     }
 
     @Test
     void getFirstJoined() {
-        throw new NotImplementedException();
 
     }
 
     @Test
     void getLastOnline() {
-        throw new NotImplementedException();
 
     }
 
     @Test
     void getJoinedAsNumber() {
-        throw new NotImplementedException();
 
     }
 }

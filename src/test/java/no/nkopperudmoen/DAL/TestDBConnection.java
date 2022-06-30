@@ -5,10 +5,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class TestDBConnection {
-    private final Connection connection;
+    private Connection connection;
+    private static TestDBConnection instance = null;
 
-    public TestDBConnection() throws SQLException {
+    private TestDBConnection() throws SQLException {
         connection = connect();
+    }
+
+    public static TestDBConnection getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new TestDBConnection();
+        }
+        return instance;
     }
 
     private Connection connect() throws SQLException {
@@ -18,9 +26,5 @@ public class TestDBConnection {
         conn = DriverManager.getConnection(url);
 
         return conn;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 }

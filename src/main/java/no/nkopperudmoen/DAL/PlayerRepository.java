@@ -1,16 +1,26 @@
 package no.nkopperudmoen.DAL;
 
+import no.nkopperudmoen.PlayerCount;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class PlayerRepository {
     private final Connection connection;
+    private static PlayerRepository repository = null;
 
-    public PlayerRepository(Connection connection) {
+    private PlayerRepository(Connection connection) {
         this.connection = connection;
         createTables();
+    }
+
+    public static PlayerRepository getInstance() throws SQLException {
+        if (repository == null) {
+            repository = new PlayerRepository(DatabaseConnection.getInstance().getConnection());
+        }
+        return repository;
     }
 
     public void createTables() {
@@ -50,7 +60,21 @@ public class PlayerRepository {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
 
+    public ArrayList<String> getMapPlayerNames() {
+        ArrayList<String> names = new ArrayList<>();
+        String sql = "SELECT NAME FROM pc_uuidMap";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                names.add(result.getString("NAME"));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return names;
     }
 
     public void insertPlayerName(String name, UUID uuid) {
