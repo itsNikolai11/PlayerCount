@@ -1,8 +1,9 @@
 PlayerInfo: "&8-------------[#97282e&lStatistikk&8]-------------
-  n\n#efdc52%spiller% #d6d6d6logget på for første gang #efdc52%firstJoined%
+  \n#efdc52%spiller% #d6d6d6logget på for første gang #efdc52%firstJoined%
   \n#d6d6d6Sist sett: #efdc52%lastSeen%
   \n#d6d6d6Ble med som spiller nr. #efdc52%number%"
 PlayerNotFound: "&cFant ikke spilleren %spiller%"
 NoAccess: "Du har ikke tilgang til dette!"
 Now: "Nå"
 FirstJoinMsg: "&6&l%spiller% logget på for første gang! Joinet som spiller nr. %number%"
+Ontime: "#d6d6d6Din totale spillertid: #efdc52%ontime%"

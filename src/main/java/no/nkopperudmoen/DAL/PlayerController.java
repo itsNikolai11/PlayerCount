@@ -37,12 +37,16 @@ public class PlayerController {
     public void updateOnJoin(Player p) {
         if (!p.hasPlayedBefore() || repo.getFirstJoined(p.getUniqueId()) == 0) {
             repo.savePlayerOnFirstJoin(p);
+            repo.populateOntime(p.getUniqueId());
             return;
         }
         if (repo.getName(p.getUniqueId()).isEmpty()) {
             repo.insertPlayerName(p.getName(), p.getUniqueId());
         } else {
             repo.updatePlayerName(p.getName(), p.getUniqueId());
+        }
+        if (repo.getOntime(p.getUniqueId()) == -1) {
+            repo.populateOntime(p.getUniqueId());
         }
         repo.updateLastOnline(p);
     }
@@ -76,6 +80,10 @@ public class PlayerController {
         return convertToDateString(firstJoined);
     }
 
+    /**
+     * @param player Player
+     * @return The last time the player was online as a Date-String
+     */
     public String getLastOnline(String player) {
         UUID playerUUID = repo.getUUID(player);
         long lastOnline = repo.getLastOnline(playerUUID);
@@ -85,15 +93,47 @@ public class PlayerController {
         return convertToDateString(lastOnline);
     }
 
+    /**
+     * @param uuid The UUID of the player whose ontime shall be retrieved
+     * @return Total ontime in minutes
+     */
+    public int getTotalOntime(UUID uuid) {
+        int ontime = repo.getOntime(uuid);
+        if (ontime == -1) {
+            return 0;
+            //Noe er galt
+        }
+        return ontime;
+    }
+
+    /**
+     * @param uuid        Player whose ontime shall be increased
+     * @param totalOntime The total, increased ontime of the player
+     */
+    public void setTotalOntime(UUID uuid, int totalOntime) {
+        repo.updateOntime(uuid, totalOntime);
+    }
+
+    /**
+     * @param player Player
+     * @return Which number the player joined as
+     */
     public int getJoinedAsNumber(String player) {
         UUID playerUUID = repo.getUUID(player);
         return repo.getPlayerNumber(playerUUID);
     }
 
+    /**
+     * @return ArrayList with names of everyone that has played on the server
+     */
     public ArrayList<String> getAllPlayerNames() {
         return repo.getMapPlayerNames();
     }
 
+    /**
+     * @param name Player to retrieve exact name for
+     * @return Exact, case-sensitive name for the player
+     */
     public String getNameExact(String name) {
         UUID playerUUID = repo.getUUID(name);
         return repo.getName(playerUUID);

@@ -20,6 +20,9 @@ public class PlayerTimeListener implements Listener {
         controller.updateUUIDMap(p);
         if (!p.hasPlayedBefore()) {
             String msg = MESSAGES.JOINED_FOR_FIRST_TIME;
+            if (msg.isEmpty() || msg.isBlank()) {
+                return;
+            }
             msg = MessagePreProcessor.populatePlaceholders(msg, p);
             Bukkit.broadcastMessage(msg);
         }

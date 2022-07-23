@@ -1,7 +1,7 @@
 name: PlayerCount
 main: no.nkopperudmoen.PlayerCount
-version: 0.0.1
-api-version: 1.18
+version: 1.0-SNAPSHOT
+api-version: 1.19
 author: itsNikolai11
 commands:
   spiller:
@@ -9,3 +9,9 @@ commands:
     usage: /spiller (spiller)
     aliases:
       - seen
+  ontime:
+    description: Sjekker din ontime
+    usage: /ontime
+    aliases:
+      - tid
+      - time

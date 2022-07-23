@@ -31,4 +31,31 @@ public class MessagePreProcessor {
         msg = msg.replaceAll("%number%", controller.getJoinedAsNumber(p.getName()) + "");
         return msg;
     }
+
+    public static String formatTimeFromMinutes(int min) {
+        int day = (min / 60) / 24;
+        int hour = (min / 60) % 24;
+        int minutes = min % 60;
+        StringBuilder bobTheBuilder = new StringBuilder();
+        if (day > 0) {
+            if (day > 1) {
+                bobTheBuilder.append(day).append(" dager");
+            } else {
+                bobTheBuilder.append(day).append(" dag");
+            }
+        }
+        if (hour > 0) {
+            if (hour > 1) {
+                bobTheBuilder.append(" ").append(hour).append(" timer");
+            } else {
+                bobTheBuilder.append(" ").append(hour).append(" time");
+            }
+        }
+        if (minutes >= 0) {
+
+            bobTheBuilder.append(" ").append(minutes).append(" min");
+
+        }
+        return bobTheBuilder.toString();
+    }
 }

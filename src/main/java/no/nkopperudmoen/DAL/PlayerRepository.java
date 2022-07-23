@@ -25,15 +25,56 @@ public class PlayerRepository {
 
     public void createTables() {
         String players = "CREATE TABLE IF NOT EXISTS pc_players (ID integer primary key autoincrement, UUID varchar, JOINED long, LASTSEEN long);";
+        String ontime = "CREATE TABLE IF NOT EXISTS pc_ontime (UUID varchar primary key, ONTIME integer);";
         String uuidMap = "CREATE TABLE IF NOT EXISTS pc_uuidMap (UUID varchar primary key, NAME varchar);";
         try {
             Statement statement = connection.createStatement();
             statement.execute(players);
+            statement.execute(ontime);
             statement.execute(uuidMap);
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void populateOntime(UUID uuid) {
+        String sql = "INSERT INTO pc_ontime(UUID, ONTIME) VALUES(?,?);";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, uuid.toString());
+            statement.setInt(2, 0);
+            TransactionHandler.addToQueue(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void updateOntime(UUID uuid, int ontime) {
+        String sql = "UPDATE pc_ontime SET ONTIME = ? WHERE UUID = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, ontime);
+            statement.setString(2, uuid.toString());
+            TransactionHandler.addToQueue(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public int getOntime(UUID uuid) {
+        int ontime = -1;
+        String sql = "SELECT * FROM pc_ontime WHERE UUID = '" + uuid.toString() + "';";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                ontime = result.getInt("ONTIME");
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return ontime;
     }
 
     public void savePlayerOnFirstJoin(Player p) {

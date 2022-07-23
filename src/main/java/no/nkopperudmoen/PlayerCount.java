@@ -1,11 +1,13 @@
 package no.nkopperudmoen;
 
+import no.nkopperudmoen.Commands.Ontime;
 import no.nkopperudmoen.Commands.Spiller;
 import no.nkopperudmoen.Commands.SpillerTabCompleter;
 import no.nkopperudmoen.DAL.DatabaseConnection;
 import no.nkopperudmoen.DAL.PlayerController;
 import no.nkopperudmoen.DAL.PlayerRepository;
 import no.nkopperudmoen.Listeners.ExecuteCommandOnJoin;
+import no.nkopperudmoen.Listeners.PlayerOntimeListener;
 import no.nkopperudmoen.Listeners.PlayerTimeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -70,11 +72,13 @@ public class PlayerCount extends JavaPlugin {
     private void registerCommands() {
         Objects.requireNonNull(getCommand("spiller")).setExecutor(new Spiller());
         Objects.requireNonNull(getCommand("spiller")).setTabCompleter(new SpillerTabCompleter());
+        Objects.requireNonNull(getCommand("ontime")).setExecutor(new Ontime());
     }
 
     private void registerEvents() {
         pm.registerEvents(new PlayerTimeListener(), this);
         pm.registerEvents(new ExecuteCommandOnJoin(this), this);
+        pm.registerEvents(new PlayerOntimeListener(), this);
     }
 
     public void loadLang() {
