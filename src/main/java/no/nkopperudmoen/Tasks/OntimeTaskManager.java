@@ -29,12 +29,6 @@ public class OntimeTaskManager {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(increaseOntime, 300000, 300000);
 
-        /*BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(MESSAGES.plugin, () -> {
-            PlayerController controller = PlayerController.getInstance();
-            int ontime = controller.getTotalOntime(uuid);
-            ontime += 5;
-            controller.setTotalOntime(uuid, ontime);
-        }, 6000, 6000);*/
         activeTasks.put(uuid, increaseOntime);
     }
 

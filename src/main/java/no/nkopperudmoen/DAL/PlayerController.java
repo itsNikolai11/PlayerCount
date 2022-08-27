@@ -130,10 +130,15 @@ public class PlayerController {
         return repo.getMapPlayerNames();
     }
 
+    public UUID getUUID(String name) {
+        return repo.getUUID(name);
+    }
+
     /**
      * @param name Player to retrieve exact name for
      * @return Exact, case-sensitive name for the player
      */
+
     public String getNameExact(String name) {
         UUID playerUUID = repo.getUUID(name);
         return repo.getName(playerUUID);

@@ -1,5 +1,6 @@
 package no.nkopperudmoen.DAL;
 
+import no.nkopperudmoen.DAL.Models.PlayerOntime;
 import no.nkopperudmoen.PlayerCount;
 import org.bukkit.entity.Player;
 
@@ -16,10 +17,25 @@ public class PlayerRepository {
         createTables();
     }
 
+    /**
+     * Standard-method to get the repository-instance with the default database-connection
+     * @return The repository-instance with the default database-connection
+     */
     public static PlayerRepository getInstance() throws SQLException {
         if (repository == null) {
             repository = new PlayerRepository(DatabaseConnection.getInstance().getConnection());
         }
+        return repository;
+    }
+
+    /***
+     * Used to give the repository-instance a database-connection different from the standard one
+     * (Used for unit-testing)
+     * @param connection The database-connection to be used
+     * @return Repository-instance with the specified connection
+     */
+    public static PlayerRepository getInstance(Connection connection){
+        repository = new PlayerRepository(connection);
         return repository;
     }
 
@@ -75,6 +91,12 @@ public class PlayerRepository {
             exception.printStackTrace();
         }
         return ontime;
+    }
+
+    public ArrayList<PlayerOntime> getTopOntime() {
+        String sql = "SELECT * FROM pc_ontime ORDER BY ONTIME DESC LIMIT 10";
+
+        return null;
     }
 
     public void savePlayerOnFirstJoin(Player p) {

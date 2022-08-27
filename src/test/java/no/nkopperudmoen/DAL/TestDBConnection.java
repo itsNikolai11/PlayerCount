@@ -19,6 +19,10 @@ public class TestDBConnection {
         return instance;
     }
 
+    public Connection getConnection(){
+        return connection;
+    }
+
     private Connection connect() throws SQLException {
         String url = "jdbc:sqlite::memory:";
         Connection conn;

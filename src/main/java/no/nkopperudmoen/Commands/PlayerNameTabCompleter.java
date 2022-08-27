@@ -11,11 +11,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class SpillerTabCompleter implements TabCompleter {
+public class PlayerNameTabCompleter implements TabCompleter {
     private final PlayerController controller = PlayerController.getInstance();
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {
+        if(controller == null){
+            return null;
+        }
         ArrayList<String> names = controller.getAllPlayerNames();
         if (sender.hasPermission(PERMISSIONS.COMMAND_SPILLER_OTHERS)) {
             return names

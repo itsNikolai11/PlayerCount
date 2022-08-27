@@ -25,7 +25,7 @@ class PlayerControllerTest {
     @BeforeEach
     public void setUp() throws SQLException {
         TestDBConnection connection = TestDBConnection.getInstance();
-        repo = PlayerRepository.getInstance();
+        repo = PlayerRepository.getInstance(connection.getInstance().getConnection());
         controller = PlayerController.getInstance();
         PowerMockito.when(player.getUniqueId()).thenReturn(uuid);
         PowerMockito.when(player.getName()).thenReturn("itsNikolai11");

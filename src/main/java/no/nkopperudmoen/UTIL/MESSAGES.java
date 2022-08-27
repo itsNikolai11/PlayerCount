@@ -17,6 +17,7 @@ public class MESSAGES {
     public static String NOW = colorize(lang.getString("Now"));
     public static String JOINED_FOR_FIRST_TIME = colorize(lang.getString("FirstJoinMsg"));
     public static String ONTIME = colorize(lang.getString("Ontime"));
+    public static String ONTIME_OTHERS = colorize(lang.getString("OntimeOthers"));
 
 
 }
