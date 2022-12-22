@@ -1,5 +1,6 @@
 package no.nkopperudmoen.DAL;
 
+import no.nkopperudmoen.DAL.Models.PlayerOntime;
 import no.nkopperudmoen.PlayerCount;
 import no.nkopperudmoen.UTIL.UUIDFetcher;
 import org.bukkit.Bukkit;
@@ -7,10 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class PlayerController {
@@ -105,6 +103,9 @@ public class PlayerController {
         }
         return ontime;
     }
+    public List<PlayerOntime> getTopOntime(){
+        return repo.getTopOntime();
+    }
 
     /**
      * @param uuid        Player whose ontime shall be increased
@@ -141,6 +142,9 @@ public class PlayerController {
 
     public String getNameExact(String name) {
         UUID playerUUID = repo.getUUID(name);
+        if(playerUUID == null){
+            return null;
+        }
         return repo.getName(playerUUID);
     }
 

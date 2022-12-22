@@ -1,5 +1,7 @@
 package no.nkopperudmoen.DAL.Models;
 
+import no.nkopperudmoen.UTIL.MessagePreProcessor;
+
 public class PlayerOntime {
     private int ontime;
     private String name;
@@ -15,6 +17,9 @@ public class PlayerOntime {
 
     public void setOntime(int ontime) {
         this.ontime = ontime;
+    }
+    public String getOntimeString(){
+        return MessagePreProcessor.formatTimeFromMinutes(ontime);
     }
 
     public String getName() {

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerRepository {
@@ -19,6 +20,7 @@ public class PlayerRepository {
 
     /**
      * Standard-method to get the repository-instance with the default database-connection
+     *
      * @return The repository-instance with the default database-connection
      */
     public static PlayerRepository getInstance() throws SQLException {
@@ -34,7 +36,7 @@ public class PlayerRepository {
      * @param connection The database-connection to be used
      * @return Repository-instance with the specified connection
      */
-    public static PlayerRepository getInstance(Connection connection){
+    public static PlayerRepository getInstance(Connection connection) {
         repository = new PlayerRepository(connection);
         return repository;
     }
@@ -93,10 +95,18 @@ public class PlayerRepository {
         return ontime;
     }
 
-    public ArrayList<PlayerOntime> getTopOntime() {
-        String sql = "SELECT * FROM pc_ontime ORDER BY ONTIME DESC LIMIT 10";
-
-        return null;
+    public List<PlayerOntime> getTopOntime() {
+        List<PlayerOntime> topOntime = new ArrayList<>();
+        String sql = "SELECT po.UUID, po.ONTIME, um.NAME FROM pc_ontime as po INNER JOIN pc_uuidMap as um ON po.UUID = um.UUID GROUP BY po.UUID, po.ONTIME, um.NAME ORDER BY po.ONTIME DESC LIMIT 10";
+        try {
+            ResultSet results = connection.createStatement().executeQuery(sql);
+            while (results.next()) {
+                topOntime.add(new PlayerOntime(results.getInt("ONTIME"), results.getString("NAME")));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return topOntime;
     }
 
     public void savePlayerOnFirstJoin(Player p) {

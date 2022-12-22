@@ -3,6 +3,7 @@ package no.nkopperudmoen.Commands;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import no.nkopperudmoen.Constants.PERMISSIONS;
+import no.nkopperudmoen.DAL.Models.PlayerOntime;
 import no.nkopperudmoen.DAL.PlayerController;
 import no.nkopperudmoen.UTIL.MESSAGES;
 import no.nkopperudmoen.UTIL.MessagePreProcessor;
@@ -11,11 +12,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 @SuppressWarnings("NullableProblems")
 public class Ontime implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             return false;
         }
         PlayerController controller = PlayerController.getInstance();
@@ -23,7 +26,6 @@ public class Ontime implements CommandExecutor {
             sender.sendMessage("En feil har oppstått!");
             return true;
         }
-        Player p = (Player) sender;
         if (args.length == 0) {
             int totalTime = controller.getTotalOntime(p.getUniqueId());
             String ontimeString = MessagePreProcessor.formatTimeFromMinutes(totalTime);
@@ -32,7 +34,15 @@ public class Ontime implements CommandExecutor {
         }
         String arg1 = args[0];
         if (arg1.equalsIgnoreCase("top")) {
-            //Toppliste
+            List<PlayerOntime> topOntime = controller.getTopOntime();
+            StringBuilder ontimeLeaderBoard = new StringBuilder();
+            ontimeLeaderBoard.append(MESSAGES.ONTIME_TOP_HEADER);
+            int count = 0;
+            for (PlayerOntime po : topOntime) {
+                count++;
+                ontimeLeaderBoard.append(MESSAGES.ONTIME_TOP.replaceAll("%num%", count + "").replaceAll("%name%", po.getName()).replaceAll("%ontime%", po.getOntimeString()));
+            }
+            p.sendMessage(ontimeLeaderBoard.toString());
             return true;
         }
         if (p.hasPermission(PERMISSIONS.COMMAND_ONTIME_OTHERS)) {
