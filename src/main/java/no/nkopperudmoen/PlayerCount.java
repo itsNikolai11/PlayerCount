@@ -2,7 +2,8 @@ package no.nkopperudmoen;
 
 import no.nkopperudmoen.Commands.Ontime;
 import no.nkopperudmoen.Commands.Spiller;
-import no.nkopperudmoen.Commands.PlayerNameTabCompleter;
+import no.nkopperudmoen.Commands.TabCompleters.OntimeTabCompleter;
+import no.nkopperudmoen.Commands.TabCompleters.PlayerNameTabCompleter;
 import no.nkopperudmoen.DAL.DatabaseConnection;
 import no.nkopperudmoen.DAL.PlayerRepository;
 import no.nkopperudmoen.Listeners.ExecuteCommandOnJoin;
@@ -80,7 +81,7 @@ public class PlayerCount extends JavaPlugin {
         Objects.requireNonNull(getCommand("spiller")).setExecutor(new Spiller());
         Objects.requireNonNull(getCommand("spiller")).setTabCompleter(new PlayerNameTabCompleter());
         Objects.requireNonNull(getCommand("ontime")).setExecutor(new Ontime());
-        Objects.requireNonNull(getCommand("ontime")).setTabCompleter(new PlayerNameTabCompleter());
+        Objects.requireNonNull(getCommand("ontime")).setTabCompleter(new OntimeTabCompleter());
     }
 
     private void registerEvents() {

@@ -1,4 +1,4 @@
-package no.nkopperudmoen.Commands;
+package no.nkopperudmoen.Commands.TabCompleters;
 
 import no.nkopperudmoen.Constants.PERMISSIONS;
 import no.nkopperudmoen.DAL.PlayerController;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class PlayerNameTabCompleter implements TabCompleter {
+public class OntimeTabCompleter implements TabCompleter {
     private final PlayerController controller = PlayerController.getInstance();
 
     @Override
@@ -20,7 +20,7 @@ public class PlayerNameTabCompleter implements TabCompleter {
             return null;
         }
         ArrayList<String> names = controller.getAllPlayerNames();
-        if (sender.hasPermission(PERMISSIONS.COMMAND_SPILLER_OTHERS)) {
+        if (sender.hasPermission(PERMISSIONS.COMMAND_ONTIME_OTHERS)) {
             return names
                     .stream()
                     .filter(n -> n.toLowerCase(Locale.ROOT)
